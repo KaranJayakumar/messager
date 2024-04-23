@@ -14,17 +14,4 @@ public class MessagerApplication {
 		SpringApplication.run(MessagerApplication.class, args);
 	}
 
-	@GetMapping("/")
-	public ResponseEntity<String> HomeController() {
-		System.out.println("Reaches");
-		System.out.println("Reaches");
-		System.out.println("Reaches");
-		System.out.println("Reaches");
-		System.out.println("Reaches");
-		System.out.println("Reaches");
-		System.out.println("Reaches");
-		System.out.println("Reaches");
-		return new ResponseEntity<String>("Welcome to the Whatsapp Backend API", HttpStatus.OK);
-	}
-
 }
