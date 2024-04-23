@@ -7,7 +7,7 @@ import com.karan.messager.request.UpdateUserRequest;
 import java.util.List;
 
 public interface UserService {
-    public User findUserProfile(String jwt);
+    public User findUserProfile(String jwt) throws UserException;
 
     public User findUserById(Integer id) throws UserException;
 

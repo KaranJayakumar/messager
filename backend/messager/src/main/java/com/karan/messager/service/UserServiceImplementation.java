@@ -20,17 +20,16 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User findUserProfile(String jwt) {
+    public User findUserProfile(String jwt) throws UserException {
         String email = tokenProvider.getEmailFromToken(jwt);
         if(email == null){
             throw new BadCredentialsException("Received invalid credentials");
         }
         User user = userRepo.findByEmail(email);
-        if(user == null){
-            throw new UserException("User not found with Provided email");
+        if(user == null) {
+            throw new UserException("User not found with Provided email " + email);
         }
         return user;
-
     }
 
     @Override
