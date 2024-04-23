@@ -10,4 +10,12 @@ public class UpdateUserRequest {
         this.full_name = full_name;
         this.profile_picture = profile_picture;
     }
+
+    public String getFull_name() {
+        return full_name;
+    }
+
+    public String getProfile_picture() {
+        return profile_picture;
+    }
 }

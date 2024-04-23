@@ -22,16 +22,6 @@ import java.util.Collections;
 public class AppConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        System.out.println("reached");
-        System.out.println("reached");
-        System.out.println("reached");
-        System.out.println("reached");
-        System.out.println("reached");
-        System.out.println("reached");
-        System.out.println("reached");
-        System.out.println("reached");
-        System.out.println("reached");
-        System.out.println("reached");
         return httpSecurity
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((auth) -> auth

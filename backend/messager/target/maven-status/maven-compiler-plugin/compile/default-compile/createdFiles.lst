@@ -1,3 +1,6 @@
 com\karan\messager\service\UserService.class
+com\karan\messager\request\UpdateUserRequest.class
 com\karan\messager\response\ApiResponse.class
+com\karan\messager\controller\UserController.class
 com\karan\messager\service\UserServiceImplementation.class
+com\karan\messager\repository\UserRepository.class
