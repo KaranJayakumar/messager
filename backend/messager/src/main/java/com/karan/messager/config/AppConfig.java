@@ -1,30 +1,45 @@
-package com.karan.config;
+package com.karan.messager.config;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.hibernate.grammars.ordering.OrderingParser;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
+@Configuration
+@EnableWebSecurity
 public class AppConfig {
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        System.out.println("reached");
+        System.out.println("reached");
+        System.out.println("reached");
+        System.out.println("reached");
+        System.out.println("reached");
+        System.out.println("reached");
+        System.out.println("reached");
+        System.out.println("reached");
+        System.out.println("reached");
+        System.out.println("reached");
         return httpSecurity
-                .csrf(csrf -> csrf.disable())
-                .cors((cors) -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
-                ).addFilterBefore(null,null)
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                ).addFilterBefore(new JWTTokenValidator(), BasicAuthenticationFilter.class)
+                    .csrf(AbstractHttpConfigurer::disable)
+                .cors((cors) -> cors.configurationSource(corsConfigurationSource()))
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .build();

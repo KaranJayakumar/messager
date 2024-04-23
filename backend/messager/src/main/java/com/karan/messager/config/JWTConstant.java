@@ -1,4 +1,4 @@
-package com.karan.config;
+package com.karan.messager.config;
 
 public class JWTConstant {
     public static final String JWT_HEADER = "Authorization";

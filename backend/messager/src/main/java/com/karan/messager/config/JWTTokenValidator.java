@@ -1,4 +1,4 @@
-package com.karan.config;
+package com.karan.messager.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
