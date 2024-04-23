@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserService {
     public User findUserProfile(String jwt);
 
-    public User findUserById(Integer id);
+    public User findUserById(Integer id) throws UserException;
 
     public User updateUser(Integer userId, UpdateUserRequest req) throws UserException;
 
