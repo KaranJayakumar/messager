@@ -1,5 +1,6 @@
 package com.karan.messager.service;
 
+import com.karan.messager.exception.UserException;
 import com.karan.messager.modal.User;
 import com.karan.messager.request.UpdateUserRequest;
 

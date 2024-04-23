@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +16,17 @@ public class GlobalException {
         ErrorDetail err = new ErrorDetail(e.getMessage(), req.getDescription(false), LocalDateTime.now());
         return new ResponseEntity<ErrorDetail>(err, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(MessageException.class)
+    public ResponseEntity<ErrorDetail> MessageExceptionHandler(MessageException me, WebRequest req){
+        ErrorDetail err = new ErrorDetail(me.getMessage(), req.getDescription(false), LocalDateTime.now());
+        return new ResponseEntity<ErrorDetail>(err, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ErrorDetail> NoHandlerFoundExceptionHandler(NoHandlerFoundException ne, WebRequest req){
+        ErrorDetail err = new ErrorDetail(ne.getMessage(), req.getDescription(false), LocalDateTime.now());
+        return new ResponseEntity<ErrorDetail>(err, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetail> otherExceptionHandler(Exception e, WebRequest req){
         ErrorDetail err = new ErrorDetail(e.getMessage(), req.getDescription(false), LocalDateTime.now());
