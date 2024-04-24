@@ -10,9 +10,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @Column(name = "full_name")
     private String fullName;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "profile_picture")
     private String profilePicture;
+
+    @Column(name = "password")
     private String password;
     public User(){
     }

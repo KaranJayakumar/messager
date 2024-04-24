@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Integer> {
-    @Query("SELECT m from message m JOIN m.chatServer cs WHERE c.id = :chatId")
+    @Query("SELECT m from message m JOIN m.chatServer cs WHERE cs.id = :chatId")
     public List<Message> findMessagesWithChatId(@Param("chatId") Integer chatId);
 }

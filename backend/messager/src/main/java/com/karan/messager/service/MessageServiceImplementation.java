@@ -8,11 +8,12 @@ import com.karan.messager.modal.Message;
 import com.karan.messager.modal.User;
 import com.karan.messager.repository.MessageRepository;
 import com.karan.messager.request.SendMessageRequest;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class MessageServiceImplementation implements MessageService{
     private MessageRepository messageRepository;
     private UserService userService;
