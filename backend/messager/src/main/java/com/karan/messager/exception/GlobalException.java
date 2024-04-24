@@ -1,7 +1,9 @@
 package com.karan.messager.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -35,6 +37,11 @@ public class GlobalException {
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ErrorDetail> NoHandlerFoundExceptionHandler(NoHandlerFoundException ne, WebRequest req){
         ErrorDetail err = new ErrorDetail(ne.getMessage(), req.getDescription(false), LocalDateTime.now());
+        return new ResponseEntity<ErrorDetail>(err, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+    public ResponseEntity<ErrorDetail> handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException e, WebRequest req) {
+        ErrorDetail err = new ErrorDetail(e.getMessage(), req.getDescription(false), LocalDateTime.now());
         return new ResponseEntity<ErrorDetail>(err, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(Exception.class)
