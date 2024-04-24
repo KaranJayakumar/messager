@@ -65,19 +65,70 @@ public class ChatServerServiceImplementation implements ChatServerService {
     }
 
     @Override
-    public ChatServer addUserToGroup(Integer chatId, String groupName, User reqUser) throws ChatServerException, UserException {
-        Optional<ChatServer> chatServer = chatServerRepository.findById(chatId);
-        chatServer.ifPresent(server -> server.getUsers().add(reqUser));
-        throw new ChatServerException("Could not find Chat Server with name" + groupName);
+    public ChatServer addUserToGroup(Integer userId, Integer chatId, User reqUser) throws ChatServerException, UserException {
+        Optional<ChatServer> opt = chatServerRepository.findById(chatId);
+        User user = userService.findUserById(userId);
+        if(opt.isPresent()){
+            ChatServer chatServer = opt.get();
+            if(chatServer.getAdmins().contains(reqUser)){
+                chatServer.getUsers().add(user);
+                chatServerRepository.save(chatServer);
+                return chatServer;
+            }else{
+                throw new UserException("Non-Admin users cannot add users");
+            }
+        }
+        throw new ChatServerException("Could not find Chat Server with Id" + chatId);
     }
 
     @Override
-    public ChatServer renameGroup(Integer chatId, String groupName) throws ChatServerException, UserException {
-        return null;
+    public ChatServer renameGroup(Integer chatId, String groupName, User reqUser) throws ChatServerException, UserException {
+        Optional<ChatServer> opt = chatServerRepository.findById(chatId);
+        if(opt.isPresent()){
+            ChatServer chatServer = opt.get();
+            if(chatServer.getAdmins().contains(reqUser)){
+                chatServer.setChat_name(groupName);
+                chatServerRepository.save(chatServer);
+                return chatServer;
+            }else{
+                throw new UserException("Non-Admin users cannot rename chat servers");
+            }
+        }
+        throw new ChatServerException("Could not find Chat Server with Id" + chatId);
     }
 
     @Override
-    public ChatServer deleteChatServer(Integer chatId, Integer userId) throws ChatServerException, UserException {
-        return null;
+    public ChatServer removeUserFromGroup(Integer chatId, Integer userId, User reqUser) throws ChatServerException, UserException {
+        Optional<ChatServer> opt = chatServerRepository.findById(chatId);
+        User user = userService.findUserById(userId);
+        if(opt.isPresent()){
+            ChatServer chatServer = opt.get();
+            if(chatServer.getAdmins().contains(reqUser)){
+                chatServer.getUsers().remove(user);
+                chatServerRepository.save(chatServer);
+                return chatServer;
+            }else if(chatServer.getUsers().contains(reqUser)){
+                if(user.getId().equals(reqUser.getId())){
+                    chatServer.getUsers().remove(user);
+                    chatServerRepository.save(chatServer);
+                    return chatServer;
+                }else{
+                    throw new UserException("Non-Admin users cannot remove users");
+                }
+            }else{
+                throw new UserException("Non-Admin users cannot remove users");
+            }
+        }
+        throw new ChatServerException("Could not find Chat Server with Id" + chatId);
+    }
+
+    @Override
+    public void deleteChatServer(Integer chatId, Integer userId) throws ChatServerException, UserException {
+        Optional<ChatServer> opt = chatServerRepository.findById(chatId);
+        User user = userService.findUserById(userId);
+        if(opt.isPresent()){
+            ChatServer chatServer = opt.get();
+            chatServerRepository.deleteById(chatServer.getId());
+        }
     }
 }

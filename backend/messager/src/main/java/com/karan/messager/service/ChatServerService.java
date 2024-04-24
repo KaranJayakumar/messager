@@ -18,9 +18,11 @@ public interface ChatServerService {
 
     public ChatServer createGroup(GroupChatRequest req, User reqUser)throws UserException;
 
-    public ChatServer addUserToGroup(Integer chatId,String groupName, User reqUser)throws ChatServerException,UserException;
+    public ChatServer addUserToGroup(Integer userId, Integer chatId, User reqUser)throws ChatServerException,UserException;
 
-    public ChatServer renameGroup(Integer chatId,String groupName)throws ChatServerException,UserException;
+    public ChatServer renameGroup(Integer chatId,String groupName, User reqUser)throws ChatServerException,UserException;
 
-    public ChatServer deleteChatServer(Integer chatId, Integer userId)throws ChatServerException,UserException;
+    public ChatServer removeUserFromGroup(Integer chatId,Integer userId, User reqUser)throws ChatServerException,UserException;
+
+    public void deleteChatServer(Integer chatId, Integer userId)throws ChatServerException,UserException;
 }

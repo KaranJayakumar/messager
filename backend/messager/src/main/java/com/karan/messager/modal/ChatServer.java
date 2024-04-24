@@ -24,12 +24,23 @@ public class ChatServer {
     @OneToOne
     private User createdBy;
 
+    @ManyToMany
+    private Set<User> admins = new HashSet<>();
+    
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<User> users = new HashSet<>();
 
     @OneToMany(mappedBy="chatServer")
     private List<Message> messages = new ArrayList<>();
     public ChatServer() {
+    }
+
+    public Set<User> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(Set<User> admins) {
+        this.admins = admins;
     }
 
     public Integer getId() {
@@ -88,7 +99,7 @@ public class ChatServer {
         this.messages = messages;
     }
 
-    public ChatServer(Integer id, String chat_name, String chat_image, String message, boolean is_group, User createdBy, Set<User> users, List<Message> messages) {
+    public ChatServer(Integer id, String chat_name, String chat_image, String message, boolean is_group, User createdBy, Set<User> users, List<Message> messages, Set<User> admins) {
         this.id = id;
         this.chat_name = chat_name;
         this.chat_image = chat_image;
@@ -96,6 +107,7 @@ public class ChatServer {
         this.createdBy = createdBy;
         this.users = users;
         this.messages = messages;
+        this.admins = admins;
     }
 
 }
