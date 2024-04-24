@@ -4,14 +4,17 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "message")
+@Table(name = "message")
 public class Message {
     @Id
     @GeneratedValue
     private Integer id;
 
+    @Column(name = "content")
     private String content;
 
+    @Column(name = "timestamp")
     private LocalDateTime timestamp;
 
     @ManyToOne
@@ -19,7 +22,7 @@ public class Message {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name="chatServer_id", nullable=false)
+    @JoinColumn(name="chat_server_id", nullable=false)
     private ChatServer chatServer;
 
     public String getContent() {

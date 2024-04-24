@@ -6,9 +6,11 @@ import com.karan.messager.modal.ChatServer;
 import com.karan.messager.modal.User;
 import com.karan.messager.repository.ChatServerRepository;
 import com.karan.messager.request.GroupChatRequest;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Service
 public class ChatServerServiceImplementation implements ChatServerService {
 
     private ChatServerRepository chatServerRepository;
@@ -28,7 +30,7 @@ public class ChatServerServiceImplementation implements ChatServerService {
         newChatServer.setCreatedBy(reqUser);
         newChatServer.getUsers().add(user);
         newChatServer.getUsers().add(reqUser);
-        newChatServer.setIs_group(false);
+        newChatServer.setGroup(false);
         return newChatServer;
     }
 
@@ -51,9 +53,9 @@ public class ChatServerServiceImplementation implements ChatServerService {
     @Override
     public ChatServer createGroup(GroupChatRequest req, User reqUser) throws UserException {
         ChatServer group = new ChatServer();
-        group.setIs_group(true);
-        group.setChat_image(req.getChat_image());
-        group.setChat_name(req.getChat_name());
+        group.setGroup(true);
+        group.setChatImage(req.getChat_image());
+        group.setChatName(req.getChat_name());
         group.setCreatedBy(reqUser);
         for(Integer userId : req.getUserIds()){
             User user = userService.findUserById(userId);
@@ -87,7 +89,7 @@ public class ChatServerServiceImplementation implements ChatServerService {
         if(opt.isPresent()){
             ChatServer chatServer = opt.get();
             if(chatServer.getAdmins().contains(reqUser)){
-                chatServer.setChat_name(groupName);
+                chatServer.setChatName(groupName);
                 chatServerRepository.save(chatServer);
                 return chatServer;
             }else{

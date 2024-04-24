@@ -14,10 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
 @RestController
 @RequestMapping("/auth")
@@ -35,14 +33,14 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws UserException {
         String email = user.getEmail();
-        String full_name = user.getFull_name();
+        String full_name = user.getFullName();
         String password = user.getPassword();
         User userInRepo = userRepository.findByEmail(email);
         if(userInRepo == null){
             throw new UserException("Email is already in use " + email);
         }
         User newUser = new User();
-        newUser.setFull_name(full_name);
+        newUser.setFullName(full_name);
         newUser.setPassword(passwordEncoder.encode(password));
         newUser.setEmail(email);
         userRepository.save(newUser);

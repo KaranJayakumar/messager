@@ -5,7 +5,6 @@ import com.karan.messager.exception.UserException;
 import com.karan.messager.modal.User;
 import com.karan.messager.repository.UserRepository;
 import com.karan.messager.request.UpdateUserRequest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
@@ -48,10 +47,10 @@ public class UserServiceImplementation implements UserService {
     public User updateUser(Integer userId, UpdateUserRequest req) throws UserException {
         User user = findUserById(userId);
         if(req.getFull_name() != null){
-            user.setFull_name(req.getFull_name());
+            user.setFullName(req.getFull_name());
         }
         if(req.getProfile_picture() != null){
-            user.setProfile_picture(req.getProfile_picture());
+            user.setProfilePicture(req.getProfile_picture());
         }
         return userRepo.save(user);
     }

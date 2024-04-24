@@ -7,26 +7,33 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity
+@Table(name = "chat_server")
+@Entity(name = "chat_server")
 public class ChatServer {
 
     @Id
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String chat_name;
-    private String chat_image;
+    @Column(name="chat_name")
+
+    private String chatName;
+
+    @Column(name="chat_image")
+    private String chatImage;
 
     @Column(name="is_group")
-    private boolean is_group;
+    private boolean isGroup;
 
     @PrimaryKeyJoinColumn(name = "created_by")
     @OneToOne
     private User createdBy;
 
+    @Column(name="admins")
     @ManyToMany
     private Set<User> admins = new HashSet<>();
-    
+
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<User> users = new HashSet<>();
 
@@ -39,46 +46,22 @@ public class ChatServer {
         return admins;
     }
 
-    public void setAdmins(Set<User> admins) {
-        this.admins = admins;
-    }
-
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+
+    public void setChatName(String chatName) {
+        this.chatName = chatName;
     }
 
-    public String getChat_name() {
-        return chat_name;
+    public void setChatImage(String chatImage) {
+        this.chatImage = chatImage;
     }
 
-    public void setChat_name(String chat_name) {
-        this.chat_name = chat_name;
+    public void setGroup(boolean group) {
+        this.isGroup = group;
     }
-
-    public String getChat_image() {
-        return chat_image;
-    }
-
-    public void setChat_image(String chat_image) {
-        this.chat_image = chat_image;
-    }
-
-    public boolean isIs_group() {
-        return is_group;
-    }
-
-    public void setIs_group(boolean is_group) {
-        this.is_group = is_group;
-    }
-
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
@@ -87,23 +70,11 @@ public class ChatServer {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-    }
-
-    public ChatServer(Integer id, String chat_name, String chat_image, String message, boolean is_group, User createdBy, Set<User> users, List<Message> messages, Set<User> admins) {
+    public ChatServer(Integer id, String chatName, String chatImage, String message, boolean isGroup, User createdBy, Set<User> users, List<Message> messages, Set<User> admins) {
         this.id = id;
-        this.chat_name = chat_name;
-        this.chat_image = chat_image;
-        this.is_group = is_group;
+        this.chatName = chatName;
+        this.chatImage = chatImage;
+        this.isGroup = isGroup;
         this.createdBy = createdBy;
         this.users = users;
         this.messages = messages;
