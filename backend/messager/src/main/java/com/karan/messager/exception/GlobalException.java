@@ -22,7 +22,7 @@ public class GlobalException {
         ErrorDetail err = new ErrorDetail(me.getMessage(), req.getDescription(false), LocalDateTime.now());
         return new ResponseEntity<ErrorDetail>(err, HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(ChatException.class)
+    @ExceptionHandler(ChatServerException.class)
     public ResponseEntity<ErrorDetail> ChatExceptionHandler(MessageException ce, WebRequest req){
         ErrorDetail err = new ErrorDetail(ce.getMessage(), req.getDescription(false), LocalDateTime.now());
         return new ResponseEntity<ErrorDetail>(err, HttpStatus.BAD_REQUEST);

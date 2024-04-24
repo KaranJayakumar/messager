@@ -17,7 +17,20 @@ public class ChatServer {
     private String chat_name;
     private String chat_image;
 
-    String message;
+    @Column(name="is_group")
+    private boolean is_group;
+
+    @PrimaryKeyJoinColumn(name = "created_by")
+    @OneToOne
+    private User createdBy;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<User> users = new HashSet<>();
+
+    @OneToMany(mappedBy="chatServer")
+    private List<Message> messages = new ArrayList<>();
+    public ChatServer() {
+    }
 
     public Integer getId() {
         return id;
@@ -41,14 +54,6 @@ public class ChatServer {
 
     public void setChat_image(String chat_image) {
         this.chat_image = chat_image;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public boolean isIs_group() {
@@ -87,23 +92,10 @@ public class ChatServer {
         this.id = id;
         this.chat_name = chat_name;
         this.chat_image = chat_image;
-        this.message = message;
         this.is_group = is_group;
         this.createdBy = createdBy;
         this.users = users;
         this.messages = messages;
     }
 
-    @Column(name="is_group")
-    private boolean is_group;
-
-    @Column(name="created_by")
-    @ManyToOne
-    private User createdBy;
-
-    @ManyToMany
-    private Set<User> users = new HashSet<>();
-
-    @OneToMany
-    private List<Message> messages = new ArrayList<>();
 }

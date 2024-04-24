@@ -1,12 +1,10 @@
 package com.karan.messager.modal;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+@Entity
 public class Message {
     @Id
     @GeneratedValue
@@ -15,9 +13,11 @@ public class Message {
     private LocalDateTime timestamp;
 
     @ManyToOne
+    @JoinColumn(name="user_id", nullable=false)
     private User user;
 
     @ManyToOne
+    @JoinColumn(name="chatServer_id", nullable=false)
     private ChatServer chatServer;
 
 }
