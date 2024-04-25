@@ -12,9 +12,13 @@ export const ChatCard = () => {
                     <p className="text-lg">Username</p>
                     <p className="text-sm">Timestamp</p>
                 </div>
-                <div className="">
+                <div className="flex justify-between items-center">
                     <p>Message...</p>
-                    <div></div>
+                    <div className="flex space-x-2 items-center">
+                        <p className="text-xs py-1 px-2 bg-green-500 rounded-full">
+                            5
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
