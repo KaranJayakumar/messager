@@ -7,7 +7,7 @@ export const MessageCard = ({
 }) => {
     return (
         <div
-            className={`py-2 px-2 rounded-md max-w-[50%] ${isReqUserMessage ? "self-start " : "self-end"}"}`}
+            className={`py-2 px-2 rounded-md max-w-[50%] ${isReqUserMessage ? "self-start bg-white" : "self-end bg-green-50"}"}`}
         >
             <p>{content}</p>
             <div></div>
