@@ -6,6 +6,7 @@ import {
     BsEmojiSmile,
     BsFilter,
     BsMicFill,
+    BsThreeDots,
     BsThreeDotsVertical,
 } from "react-icons/bs"
 import { TbCircleDashed } from "react-icons/tb"
@@ -14,6 +15,8 @@ import { MessageCard } from "./MessageCard/MessageCard"
 import { FaMessage } from "react-icons/fa6"
 import { ImAttachment } from "react-icons/im"
 import { Profile } from "./Profile/Profile"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
+import { Label } from "./ui/label"
 
 export const HomePage = () => {
     const [searchQuery, setSearchQuery] = useState("")
@@ -33,6 +36,7 @@ export const HomePage = () => {
     const handleCloseOpenProfile = () => {
         setIsProfile(false)
     }
+    const handleCreateGroup = () => {}
     return (
         <div className="relative">
             <div className="py-14 bg-[#00a884] w-full "></div>
@@ -61,6 +65,27 @@ export const HomePage = () => {
                                 <div className="space-x-3 text-2xl flex">
                                     <TbCircleDashed />
                                     <BiCommentDetail />
+                                    <Popover>
+                                        <PopoverTrigger>
+                                            <BsThreeDots />
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-15">
+                                            <div className="flex flex-col gap-4">
+                                                <Label className="cursor-pointer">
+                                                    Profile
+                                                </Label>
+                                                <Label
+                                                    onClick={handleCreateGroup}
+                                                    className="cursor-pointer"
+                                                >
+                                                    Create Group
+                                                </Label>
+                                                <Label className="cursor-pointer">
+                                                    Logout
+                                                </Label>
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
                                 </div>
                             </div>
                             <div className="relative flex justify-center items-center py-4 px-3">
