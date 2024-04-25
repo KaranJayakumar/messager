@@ -17,9 +17,11 @@ import { ImAttachment } from "react-icons/im"
 import { Profile } from "./Profile/Profile"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { Label } from "./ui/label"
+import { CreateGroup } from "./Group/CreateGroup"
 
 export const HomePage = () => {
     const [searchQuery, setSearchQuery] = useState("")
+    const [isGroup, setIsGroup] = useState(false)
     const handleSearch = (value: string) => {
         value + "fjs"
     }
@@ -36,12 +38,15 @@ export const HomePage = () => {
     const handleCloseOpenProfile = () => {
         setIsProfile(false)
     }
-    const handleCreateGroup = () => {}
+    const handleCreateGroup = () => {
+        setIsGroup(true)
+    }
     return (
         <div className="relative">
             <div className="py-14 bg-[#00a884] w-full "></div>
             <div className="flex h-[90vh] bg-[#33302f] absolute top-[3vh] left-[2vw] w-[96vw]">
                 <div className="left w-[30%] h-full">
+                    {isGroup && <CreateGroup />}
                     {isProfile && (
                         <div className="w-full h-full">
                             <Profile
@@ -49,7 +54,7 @@ export const HomePage = () => {
                             />
                         </div>
                     )}
-                    {!isProfile && (
+                    {!isProfile && !isGroup && (
                         <div className="w-full">
                             <div className="flex justify-between items-center p-3">
                                 <div
