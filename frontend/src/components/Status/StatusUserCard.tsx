@@ -6,7 +6,10 @@ export const StatusUserCard = () => {
         navigate("/status/{userId}")
     }
     return (
-        <div className="flex items-center p-3 ">
+        <div
+            onClick={handleNavigate}
+            className="cursor-pointer flex items-center p-3 "
+        >
             <div>
                 <img
                     className="h-7 w-7 lg:w-10 lg:h-10 rounded-full"
