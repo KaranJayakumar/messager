@@ -23,7 +23,7 @@ const formSchema = z.object({
         message: "Password must be at least 2 characters.",
     }),
 })
-export const SignIn = () => {
+export const SignUp = () => {
     const navigate = useNavigate()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -41,7 +41,7 @@ export const SignIn = () => {
                 <div className="w-[30%] p-10 shadow-md flex flex-col">
                     <Form {...form}>
                         <FaMessage className="w-20 h-20 my-7 self-center" />
-                        <h1 className="text-3xl self-center my-4">Login</h1>
+                        <h1 className="text-3xl self-center">Sign Up</h1>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
                             className="space-y-8"
@@ -86,13 +86,13 @@ export const SignIn = () => {
                                     type="submit"
                                     className="rounded-full w-full"
                                 >
-                                    Login
+                                    Sign Up
                                 </Button>
                                 <p
                                     className="text-sm mt-7 cursor-pointer"
-                                    onClick={() => navigate("/signup")}
+                                    onClick={() => navigate("/signin")}
                                 >
-                                    Haven't registered yet? Sign Up
+                                    Already registered? Sign In
                                 </p>
                             </div>
                         </form>

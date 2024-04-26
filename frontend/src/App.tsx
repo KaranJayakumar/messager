@@ -3,6 +3,7 @@ import { HomePage } from "./components/HomePage"
 import { Status } from "./components/Status/Status"
 import { StatusViewer } from "./components/Status/StatusViewer"
 import { SignIn } from "./components/Auth/SignIn"
+import { SignUp } from "./components/Auth/SignUp"
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                     element={<StatusViewer />}
                 ></Route>
                 <Route path="/signin" element={<SignIn />}></Route>
+                <Route path="/signup" element={<SignUp />}></Route>
             </Routes>
         </div>
     )
