@@ -1,7 +1,7 @@
 import { AiOutlineClose } from "react-icons/ai"
 
 interface SelectedMemberProps {
-    handleRemoveMember: (item: number) => void
+    handleRemoveMember: (item: number | unknown) => void
     member: number | unknown
 }
 export const SelectedMember: React.FC<SelectedMemberProps> = ({
@@ -16,7 +16,7 @@ export const SelectedMember: React.FC<SelectedMemberProps> = ({
             />
             <p className="px-2">Usernames</p>
             <AiOutlineClose
-                onClick={() => handleRemoveMember}
+                onClick={() => handleRemoveMember(member)}
                 className="pr-1 cursor-pointer"
             />
         </div>

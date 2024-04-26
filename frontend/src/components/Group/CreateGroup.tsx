@@ -16,7 +16,7 @@ export const CreateGroup = () => {
     return (
         <div className="w-full h-full">
             {!newGroup && (
-                <div>
+                <div className="">
                     <div className="flex items-center space-x-10 pt-16 pb-5">
                         <BsArrowLeft className="cursor-pointer text-2xl font-bold" />
                         <p className="text-xl font-semibold">
@@ -29,7 +29,7 @@ export const CreateGroup = () => {
                                 Array.from(groupMember).map(
                                     (item: number | unknown) => (
                                         <SelectedMember
-                                            handleRemoveMember={() =>
+                                            handleRemoveMember={(item) =>
                                                 handleRemoveMember(item)
                                             }
                                             member={item}
@@ -62,7 +62,7 @@ export const CreateGroup = () => {
                                 </div>
                             ))}
                     </div>
-                    <div className="bottom-10 py-10 items-center justify-center flex">
+                    <div className="bottom-10 items-center justify-center flex">
                         <div
                             className="bg-green-600 rounded-full p-4 cursor-pointer"
                             onClick={() => {

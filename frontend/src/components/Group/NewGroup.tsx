@@ -15,7 +15,10 @@ export const NewGroup = () => {
                 <p className="text-xl font-semibold">New Group</p>
             </div>
             <div className="flex flex-col justify-center items-center my-12">
-                <img src="https://cdn.pixabay.com/photo/2023/04/03/18/35/nature-7897648_1280.jpg" />
+                <img
+                    className="h-[10rem] w-[10rem] rounded-full"
+                    src="https://cdn.pixabay.com/photo/2023/04/03/18/35/nature-7897648_1280.jpg"
+                />
                 {IsImageUploading && (
                     <Progress className="absolute top-0 left-[6rem]" />
                 )}
@@ -37,10 +40,11 @@ export const NewGroup = () => {
             </div>
             {groupName && (
                 <div className="py-10 flex items-center justify-center">
-                    <Button>
+                    <Button className=" p-0 rounded-full w-fit h-fit">
+                        {" "}
                         <div className="bg-[#0c977d] rounded-full p-4">
                             <BsCheck2 className="font-bold text-3xl" />
-                        </div>
+                        </div>{" "}
                     </Button>
                 </div>
             )}
