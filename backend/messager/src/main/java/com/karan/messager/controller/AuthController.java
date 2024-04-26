@@ -7,6 +7,7 @@ import com.karan.messager.repository.UserRepository;
 import com.karan.messager.request.LoginRequest;
 import com.karan.messager.response.AuthResponse;
 import com.karan.messager.service.CustomUserService;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
