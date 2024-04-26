@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -16,8 +15,8 @@ import { Input } from "@/components/ui/input"
 import { FaMessage } from "react-icons/fa6"
 import { useNavigate } from "react-router-dom"
 const formSchema = z.object({
-    username: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
+    email: z.string().email({
+        message: "Invalid email",
     }),
     password: z.string().min(2, {
         message: "Password must be at least 2 characters.",
@@ -28,7 +27,7 @@ export const SignIn = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            email: "",
         },
     })
 
@@ -48,19 +47,16 @@ export const SignIn = () => {
                         >
                             <FormField
                                 control={form.control}
-                                name="username"
+                                name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel>Email</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="Email"
                                                 {...field}
                                             />
                                         </FormControl>
-                                        <FormDescription>
-                                            This is your public display name.
-                                        </FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}

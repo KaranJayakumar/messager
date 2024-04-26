@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -15,9 +14,15 @@ import {
 import { Input } from "@/components/ui/input"
 import { FaMessage } from "react-icons/fa6"
 import { useNavigate } from "react-router-dom"
+import { register } from "@/redux/Auth/Action"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "@/redux/store"
 const formSchema = z.object({
-    username: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
+    email: z.string().email({
+        message: "Invalid email",
+    }),
+    full_name: z.string().min(2, {
+        message: "Full name must be at least 4 characters",
     }),
     password: z.string().min(2, {
         message: "Password must be at least 2 characters.",
@@ -25,14 +30,18 @@ const formSchema = z.object({
 })
 export const SignUp = () => {
     const navigate = useNavigate()
+    const dispatch: AppDispatch = useDispatch()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            email: "",
+            full_name: "",
+            password: "",
         },
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        dispatch(register(values))
         console.log(values)
     }
     return (
@@ -44,23 +53,36 @@ export const SignUp = () => {
                         <h1 className="text-3xl self-center">Sign Up</h1>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
-                            className="space-y-8"
+                            className="space-y-6"
                         >
                             <FormField
                                 control={form.control}
-                                name="username"
+                                name="full_name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel>Full Name</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Your name here"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="Email"
                                                 {...field}
                                             />
                                         </FormControl>
-                                        <FormDescription>
-                                            This is your public display name.
-                                        </FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}

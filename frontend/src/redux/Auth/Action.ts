@@ -17,8 +17,9 @@ export const register = (data: any) => async (dispatch: AppDispatch) => {
             },
             body: JSON.stringify(data),
         })
-        const user = res.json()
-        console.log("User has been registered")
+        const user = await res.json()
+        console.log("register ", user)
+        if (user.jwt) localStorage.setItem("token", user.jwt)
         dispatch({ type: REGISTER, payload: user })
     } catch (e) {
         console.log("Error in SignUp")
