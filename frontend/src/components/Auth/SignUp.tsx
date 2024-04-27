@@ -15,13 +15,12 @@ import { Input } from "@/components/ui/input"
 import { FaMessage } from "react-icons/fa6"
 import { useNavigate } from "react-router-dom"
 import { register } from "@/redux/Auth/Action"
-import { useDispatch } from "react-redux"
-import { AppDispatch } from "@/redux/store"
+import { useAppDispatch } from "@/redux/hooks"
 const formSchema = z.object({
     email: z.string().email({
         message: "Invalid email",
     }),
-    full_name: z.string().min(2, {
+    fullName: z.string().min(2, {
         message: "Full name must be at least 4 characters",
     }),
     password: z.string().min(2, {
@@ -30,12 +29,12 @@ const formSchema = z.object({
 })
 export const SignUp = () => {
     const navigate = useNavigate()
-    const dispatch: AppDispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
-            full_name: "",
+            fullName: "",
             password: "",
         },
     })
@@ -57,7 +56,7 @@ export const SignUp = () => {
                         >
                             <FormField
                                 control={form.control}
-                                name="full_name"
+                                name="fullName"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Full Name</FormLabel>

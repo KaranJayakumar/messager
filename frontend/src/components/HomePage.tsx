@@ -18,6 +18,7 @@ import { Profile } from "./Profile/Profile"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { Label } from "./ui/label"
 import { CreateGroup } from "./Group/CreateGroup"
+import { useAppDispatch } from "@/redux/hooks"
 
 export const HomePage = () => {
     const [searchQuery, setSearchQuery] = useState("")
@@ -41,6 +42,8 @@ export const HomePage = () => {
     const handleCreateGroup = () => {
         setIsGroup(true)
     }
+    const dispatch = useAppDispatch()
+    const handleLogout = () => {}
     return (
         <div className="relative">
             <div className="py-14 bg-[#00a884] w-full "></div>
