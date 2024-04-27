@@ -14,8 +14,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { FaMessage } from "react-icons/fa6"
 import { useNavigate } from "react-router-dom"
-import { register } from "@/redux/Auth/Action"
-import { useAppDispatch } from "@/redux/hooks"
+import { currentUser, register } from "@/redux/Auth/Action"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { RootState } from "@/redux/store"
+import { useEffect } from "react"
 const formSchema = z.object({
     email: z.string().email({
         message: "Invalid email",
@@ -43,6 +45,18 @@ export const SignUp = () => {
         dispatch(register(values))
         console.log(values)
     }
+    const authState = useAppSelector((store: RootState) => store.auth)
+    const token = localStorage.getItem("token")
+    useEffect(() => {
+        if (token) {
+            dispatch(currentUser({ token: token }))
+        }
+    }, [token, dispatch])
+    useEffect(() => {
+        if (authState.reqUser?.fullName) {
+            navigate("/")
+        }
+    }, [authState.reqUser, navigate])
     return (
         <div>
             <div className="flex justify-center h-screen items-center">

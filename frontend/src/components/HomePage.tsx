@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AiOutlineSearch } from "react-icons/ai"
 import "./HomePage.css"
 import { BiCommentDetail } from "react-icons/bi"
@@ -18,7 +18,10 @@ import { Profile } from "./Profile/Profile"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { Label } from "./ui/label"
 import { CreateGroup } from "./Group/CreateGroup"
-import { useAppDispatch } from "@/redux/hooks"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { currentUser, logout } from "@/redux/Auth/Action"
+import { useNavigate } from "react-router-dom"
+import { RootState } from "@/redux/store"
 
 export const HomePage = () => {
     const [searchQuery, setSearchQuery] = useState("")
@@ -43,7 +46,22 @@ export const HomePage = () => {
         setIsGroup(true)
     }
     const dispatch = useAppDispatch()
-    const handleLogout = () => {}
+    const handleLogout = () => {
+        localStorage.removeItem("token")
+        dispatch(logout())
+    }
+    const token = localStorage.getItem("token")
+    const authState = useAppSelector((store: RootState) => store.auth)
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (!authState.reqUser) {
+            navigate("/signin")
+        }
+    }, [navigate, authState.reqUser])
+    useEffect(() => {
+        dispatch(currentUser({ token: token }))
+    }, [token, dispatch])
+
     return (
         <div className="relative">
             <div className="py-14 bg-[#00a884] w-full "></div>
@@ -88,7 +106,10 @@ export const HomePage = () => {
                                                 >
                                                     Create Group
                                                 </Label>
-                                                <Label className="cursor-pointer">
+                                                <Label
+                                                    onClick={handleLogout}
+                                                    className="cursor-pointer"
+                                                >
                                                     Logout
                                                 </Label>
                                             </div>

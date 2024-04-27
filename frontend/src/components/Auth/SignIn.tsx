@@ -14,6 +14,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { FaMessage } from "react-icons/fa6"
 import { useNavigate } from "react-router-dom"
+import { useEffect } from "react"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { RootState} from "@/redux/store"
+import { currentUser, login } from "@/redux/Auth/Action"
 const formSchema = z.object({
     email: z.string().email({
         message: "Invalid email",
@@ -23,17 +27,31 @@ const formSchema = z.object({
     }),
 })
 export const SignIn = () => {
+    function onSubmit(values: z.infer<typeof formSchema>) {
+        dispatch(login(values))
+        console.log(values)
+    }
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
+            password: "",
         },
     })
-
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
-    }
+    const authState = useAppSelector((store: RootState) => store.auth)
+    const token = localStorage.getItem("token")
+    useEffect(() => {
+        if (token) {
+            dispatch(currentUser({ token: token }))
+        }
+    }, [token, dispatch])
+    useEffect(() => {
+        if (authState.reqUser?.fullName) {
+            navigate("/")
+        }
+    }, [authState.reqUser, navigate])
     return (
         <div>
             <div className="flex justify-center h-screen items-center">

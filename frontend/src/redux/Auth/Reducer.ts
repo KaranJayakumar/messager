@@ -6,7 +6,7 @@ interface LoginResponse {
 }
 interface User {
     Id: number
-    full_name: string
+    fullName: string
     email: string
     profile_picture: string
     password: string
@@ -53,11 +53,17 @@ export const authSlice = createSlice({
         updateUser(state, action: PayloadAction<UpdateUser>) {
             state.updateUser = action.payload
         },
-        logout(state) {
+        handleLogout(state) {
             state.reqUser = null
         },
         // Define other reducers here
     },
 })
-export const { registerUser, loginUser, searchUser, reqUser, updateUser } =
-    authSlice.actions
+export const {
+    registerUser,
+    loginUser,
+    searchUser,
+    reqUser,
+    updateUser,
+    handleLogout,
+} = authSlice.actions

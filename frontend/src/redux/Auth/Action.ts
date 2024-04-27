@@ -1,6 +1,6 @@
 import { BASE_API_URL } from "@/config/api"
 import { AppDispatch } from "../store"
-import { loginUser, registerUser, reqUser } from "./Reducer"
+import { handleLogout, loginUser, registerUser, reqUser } from "./Reducer"
 interface RegisterUser {
     fullName: string
     email: string
@@ -16,7 +16,7 @@ interface LoginUser {
     password: string
 }
 interface ReqUser {
-    token: string
+    token: string | null
 }
 interface SearchUser {
     query: string
@@ -70,7 +70,7 @@ export const currentUser = (data: ReqUser) => async (dispatch: AppDispatch) => {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: data.token,
+                Authorization: `BEARER ${data.token}`,
             },
         })
         const res = await response.json()
@@ -125,5 +125,5 @@ export const updateUser =
     }
 export const logout = () => async (dispatch: AppDispatch) => {
     localStorage.removeItem("token")
-    dispatch(logout())
+    dispatch(handleLogout())
 }
