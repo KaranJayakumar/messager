@@ -1,29 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-
-interface LoginResponse {
-    jwt: string
-    isAuth: boolean
-}
-interface User {
-    Id: number
-    fullName: string
-    email: string
-    profile_picture: string
-    password: string
-}
-interface SearchUser {
-    users: User[]
-}
-interface AuthState {
+import { LoginResponse, SearchUser, User, UpdateUser } from "./types"
+export interface AuthState {
     registerUser: LoginResponse | null
     loginUser: LoginResponse | null
     reqUser: User | null
     searchUser: SearchUser | null
     updateUser: UpdateUser | null
-}
-interface UpdateUser {
-    message: string
-    status: boolean
 }
 
 const initialState: AuthState = {
