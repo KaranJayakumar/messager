@@ -21,16 +21,18 @@ import java.util.List;
 public class JWTTokenValidator extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws BadCredentialsException, ServletException, IOException {
+        System.out.println("Reached filter");
        String jwt = request.getHeader("Authorization");
        if(jwt != null){
            try{
+               System.out.println("Reached filter");
                //Bearer token
                jwt = jwt.substring(7);
                SecretKey key = Keys.hmacShaKeyFor(JWTConstant.SECRET_KEY.getBytes());
-               Claims claim = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJwt(jwt).getBody();
-               String username = String.valueOf(claim.get("username"));
-               String authorities = String.valueOf(claim.get("authorities"));
+               Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(jwt).getPayload();
+               String username = String.valueOf(claims.get("username"));
+               String authorities = String.valueOf(claims.get("authorities"));
                List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
                Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, auths);
                SecurityContextHolder.getContext().setAuthentication(authentication);

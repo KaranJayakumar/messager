@@ -13,9 +13,9 @@ import java.util.Date;
 public class TokenProvider {
     SecretKey key = Keys.hmacShaKeyFor(JWTConstant.SECRET_KEY.getBytes());
     public String generateToken(Authentication auth) {
-        return Jwts.builder().setIssuer("Karan's code")
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + 86400000))
+        return Jwts.builder().issuer("Karan's code")
+                .issuedAt(new Date())
+                .expiration(new Date(new Date().getTime() + 86400000))
                 .claim("email", auth.getName())
                 .signWith(key)
                 .compact();
@@ -23,7 +23,10 @@ public class TokenProvider {
     }
     public String getEmailFromToken(String jwt){
         jwt = jwt.substring(7);
-        Claims claim = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+        Claims claim = Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(JWTConstant.SECRET_KEY.getBytes()))
+                .build()
+                .parseSignedClaims(jwt).getPayload();;
         return String.valueOf(claim.get("email"));
     }
 }

@@ -9,6 +9,7 @@ import com.karan.messager.response.AuthResponse;
 import com.karan.messager.service.CustomUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,13 +32,13 @@ public class AuthController {
         this.tokenProvider = tokenProvider;
         this.customUserService = customUserService;
     }
-    @PostMapping("/signup")
+    @PostMapping(value ="/signup", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws UserException {
         String email = user.getEmail();
         String full_name = user.getFullName();
         String password = user.getPassword();
         User userInRepo = userRepository.findByEmail(email);
-        if(userInRepo == null){
+        if(userInRepo != null){
             throw new UserException("Email is already in use " + email);
         }
         User newUser = new User();
@@ -45,10 +46,15 @@ public class AuthController {
         newUser.setPassword(passwordEncoder.encode(password));
         newUser.setEmail(email);
         userRepository.save(newUser);
+        //System.out.println("reached");
         Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+        //System.out.println("reached past auth");
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateToken(authentication);
-        return new ResponseEntity<AuthResponse>(new AuthResponse(jwt, true), HttpStatus.ACCEPTED);
+        //System.out.println("reached past generate");
+        ResponseEntity<AuthResponse> res = new ResponseEntity<AuthResponse>(new AuthResponse(jwt, true), HttpStatus.ACCEPTED);
+        //System.out.println("reached past response");
+        return res;
     }
     @PostMapping("login")
     public ResponseEntity<AuthResponse> loginHandler(@RequestBody LoginRequest loginRequest){

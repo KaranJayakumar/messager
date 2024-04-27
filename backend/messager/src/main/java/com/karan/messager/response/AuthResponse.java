@@ -9,4 +9,20 @@ public class AuthResponse {
         this.jwt = jwt;
         this.isAuth = isAuth;
     }
+
+    public String getJwt() {
+        return jwt;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
+    }
+
+    public Boolean getAuth() {
+        return isAuth;
+    }
+
+    public void setAuth(Boolean auth) {
+        isAuth = auth;
+    }
 }
