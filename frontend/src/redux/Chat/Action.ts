@@ -1,9 +1,16 @@
 import { BASE_API_URL } from "@/config/api"
 import { AppDispatch } from "../store"
-
+import {
+    createGroupChatAction,
+    createSingleChatAction,
+    getUserChatsAction,
+} from "./Reducer"
+interface SingleChatData {
+    token: string
+}
 export const createChat = (chatData) => async (dispatch: AppDispatch) => {
     try {
-        const res = await fetch(`${BASE_API_URL}/api/chats/single`, {
+        const res = await fetch(`${BASE_API_URL}/api/chats/createChat`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -12,7 +19,7 @@ export const createChat = (chatData) => async (dispatch: AppDispatch) => {
             body: JSON.stringify(chatData),
         })
         const responseJson = await res.json()
-        dispatch(createSingleChat(responseJson))
+        dispatch(createSingleChatAction(responseJson))
     } catch (e) {
         console.log("Error creating chat", e)
     }
@@ -29,7 +36,7 @@ export const createGroupChat =
                 body: JSON.stringify(groupChatData),
             })
             const responseJson = await res.json()
-            dispatch(createGroupChat(responseJson))
+            dispatch(createGroupChatAction(responseJson))
         } catch (e) {
             console.log("Error creating chat", e)
         }
@@ -46,7 +53,7 @@ export const getChatsForUser =
                 body: JSON.stringify(userChatData),
             })
             const responseJson = await res.json()
-            dispatch(getUserChats(responseJson))
+            dispatch(getUserChatsAction(responseJson))
         } catch (e) {
             console.log("Error creating chat", e)
         }

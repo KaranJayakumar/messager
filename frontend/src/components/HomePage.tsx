@@ -22,16 +22,17 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { currentUser, logout } from "@/redux/Auth/Action"
 import { useNavigate } from "react-router-dom"
 import { RootState } from "@/redux/store"
+import { searchUser } from "@/redux/Auth/Action"
+import { createChat, getChatsForUser } from "@/redux/Chat/Action"
+import { User } from "@/types"
 
 export const HomePage = () => {
     const [searchQuery, setSearchQuery] = useState("")
     const [isGroup, setIsGroup] = useState(false)
-    const handleSearch = (value: string) => {
-        value + "fjs"
-    }
-    const [currentChat, setCurrentChat] = useState(false)
-    const handleClickOnChatCard = () => {
-        setCurrentChat(true)
+    const [currentChat, setCurrentChat] = useState()
+    const handleClickOnChatCard = (item: User) => {
+        dispatch(createChat({ userId: item.id, token: token }))
+        //setCurrentChat(item)
     }
     const [content, setContent] = useState("")
     const [isProfile, setIsProfile] = useState(false)
@@ -52,6 +53,7 @@ export const HomePage = () => {
     }
     const token = localStorage.getItem("token")
     const authState = useAppSelector((store: RootState) => store.auth)
+    const chatState = useAppSelector((store: RootState) => store.chat)
     const navigate = useNavigate()
     useEffect(() => {
         if (!authState.reqUser) {
@@ -61,6 +63,16 @@ export const HomePage = () => {
     useEffect(() => {
         dispatch(currentUser({ token: token }))
     }, [token, dispatch])
+
+    const handleSearch = (value: string) => {
+        console.log(JSON.stringify(authState.searchUser))
+        if (value && token) {
+            dispatch(searchUser({ query: value, token: token }))
+        }
+    }
+    useEffect(() => {
+        dispatch(getChatsForUser({}))
+    }, [chatState.createdChat, chatState.createdGroup, dispatch])
 
     return (
         <div className="relative">
@@ -119,7 +131,7 @@ export const HomePage = () => {
                             </div>
                             <div className="relative flex justify-center items-center py-4 px-3">
                                 <input
-                                    className="border-none outline-none rounded-md w-[93%] pl-9 py-2"
+                                    className="border-none text-black outline-none rounded-md w-[93%] pl-9 py-2"
                                     type="text"
                                     placeholder="Search or start new chat"
                                     onChange={(e) => {
@@ -135,10 +147,28 @@ export const HomePage = () => {
                             </div>
                             <div className="overflow-y-scroll h-[76%]">
                                 {searchQuery &&
-                                    [1, 1, 1, 1, 1].map(() => (
-                                        <div onClick={handleClickOnChatCard}>
+                                    authState.searchUser?.map((item, index) => (
+                                        <div
+                                            onClick={() =>
+                                                handleClickOnChatCard(item)
+                                            }
+                                            key={index}
+                                        >
                                             <hr />
-                                            <ChatCard />
+                                            <ChatCard user={item} />
+                                        </div>
+                                    ))}
+                                {chatState.chats.length > 0 &&
+                                    !searchQuery &&
+                                    chatState.chats?.map((item, index) => (
+                                        <div
+                                            onClick={() =>
+                                                handleClickOnChatCard(item)
+                                            }
+                                            key={index}
+                                        >
+                                            <hr />
+                                            <ChatCard user={item} />
                                         </div>
                                     ))}
                             </div>
@@ -176,7 +206,7 @@ export const HomePage = () => {
                         </div>
                         <div className="px-10 h-[85vh] overflow-y-scroll ">
                             <div className="space-y-1 flex flex-col justify-center mt-20 py-2">
-                                {[1, 1, 1, 1].map((item, i) => (
+                                {[1, 1, 1, 1, 1].map((item, i) => (
                                     <MessageCard
                                         content={"message"}
                                         isReqUserMessage={i % 2 == 0}

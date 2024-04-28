@@ -1,6 +1,13 @@
 import { BASE_API_URL } from "@/config/api"
 import { AppDispatch } from "../store"
-import { handleLogout, loginUser, registerUser, reqUser } from "./Reducer"
+import {
+    handleLogoutAction,
+    loginUserAction,
+    registerUserAction,
+    reqUserAction,
+    searchUserAction,
+    updateUserAction,
+} from "./Reducer"
 interface RegisterUser {
     fullName: string
     email: string
@@ -41,7 +48,7 @@ export const register =
             const res = await response.json()
             console.log("register ", res)
             if (res.jwt) localStorage.setItem("token", res.jwt)
-            dispatch(registerUser(res))
+            dispatch(registerUserAction(res))
         } catch (e) {
             console.log("Error in SignUp")
             console.log(e)
@@ -49,7 +56,7 @@ export const register =
     }
 export const login = (data: LoginUser) => async (dispatch: AppDispatch) => {
     try {
-        const response = await fetch(`${BASE_API_URL}/auth/signin`, {
+        const response = await fetch(`${BASE_API_URL}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -57,8 +64,9 @@ export const login = (data: LoginUser) => async (dispatch: AppDispatch) => {
             body: JSON.stringify(data),
         })
         const res = await response.json()
+        if (res.jwt) localStorage.setItem("token", res.jwt)
         console.log("login" + res)
-        dispatch(loginUser(res))
+        dispatch(loginUserAction(res))
     } catch (e) {
         console.log("Error in Login")
         console.log(e)
@@ -75,7 +83,7 @@ export const currentUser = (data: ReqUser) => async (dispatch: AppDispatch) => {
         })
         const res = await response.json()
         console.log("reqUser" + res)
-        dispatch(reqUser(res))
+        dispatch(reqUserAction(res))
     } catch (e) {
         console.log("Error in finding Current User")
         console.log(e)
@@ -85,7 +93,7 @@ export const searchUser =
     (data: SearchUser) => async (dispatch: AppDispatch) => {
         try {
             const response = await fetch(
-                `${BASE_API_URL}/api/users/search?name={data.searchQuery}`,
+                `${BASE_API_URL}/api/users/${data.query}`,
                 {
                     method: "GET",
                     headers: {
@@ -96,7 +104,7 @@ export const searchUser =
             )
             const res = await response.json()
             console.log("login" + res)
-            dispatch(searchUser(res))
+            dispatch(searchUserAction(res))
         } catch (e) {
             console.log("Error in searching User")
             console.log(e)
@@ -117,7 +125,7 @@ export const updateUser =
             )
             const res = await response.json()
             console.log("login" + res)
-            dispatch(updateUser(res))
+            dispatch(updateUserAction(res))
         } catch (e) {
             console.log("Error in updating User")
             console.log(e)
@@ -125,5 +133,5 @@ export const updateUser =
     }
 export const logout = () => async (dispatch: AppDispatch) => {
     localStorage.removeItem("token")
-    dispatch(handleLogout())
+    dispatch(handleLogoutAction())
 }
