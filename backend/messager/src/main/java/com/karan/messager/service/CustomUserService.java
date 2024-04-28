@@ -24,6 +24,7 @@ public class CustomUserService implements UserDetailsService {
         if(user == null){
             throw new UsernameNotFoundException("User not found with email " + email);
         }
+        System.out.printf("Password, %s", user.getPassword());
         List<GrantedAuthority> authorities = new ArrayList<>();
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }

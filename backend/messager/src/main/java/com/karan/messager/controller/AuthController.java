@@ -14,10 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -56,7 +60,7 @@ public class AuthController {
         //System.out.println("reached past response");
         return res;
     }
-    @PostMapping("login")
+    @PostMapping(value ="/login", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthResponse> loginHandler(@RequestBody LoginRequest loginRequest){
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
@@ -70,9 +74,10 @@ public class AuthController {
         if(userDetails == null){
             throw new BadCredentialsException("Invalid email or password");
         }
-        if(!passwordEncoder.encode(password).matches(userDetails.getPassword())){
+        if(!(passwordEncoder.matches(password, userDetails.getPassword()))){
             throw new BadCredentialsException("Invalid email or password");
         }
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
     }
 }

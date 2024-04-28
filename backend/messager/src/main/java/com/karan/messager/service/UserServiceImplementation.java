@@ -25,6 +25,7 @@ public class UserServiceImplementation implements UserService {
     public User findUserProfile(String jwt) throws UserException {
         String email = tokenProvider.getEmailFromToken(jwt);
         if(email == null){
+            System.out.println("Reached");
             throw new BadCredentialsException("Received invalid token");
         }
         User user = userRepo.findByEmail(email);
@@ -57,6 +58,9 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public List<User> searchUser(String query) {
-        return userRepo.searchUsers(query);
+        System.out.println("Search query " + query);
+        List<User> users =  userRepo.searchUsers(query);
+        System.out.println(users);
+        return users;
     }
 }
