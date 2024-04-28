@@ -26,12 +26,12 @@ import { searchUser } from "@/redux/Auth/Action"
 import { createChat, getChatsForUser } from "@/redux/Chat/Action"
 import { User } from "@/types"
 import { ChatServer } from "@/redux/Chat/types"
-import { current } from "@reduxjs/toolkit"
+import { createMessage, getAllMessages } from "@/redux/Message/Action"
 
 export const HomePage = () => {
     const [searchQuery, setSearchQuery] = useState("")
     const [isGroup, setIsGroup] = useState(false)
-    const [currentChat, setCurrentChat] = useState<ChatServer | null>(null)
+    const [currentChat, setCurrentChat] = useState<ChatServer | null>()
     const handleClickOnChatCard = (item: User) => {
         if (token) {
             dispatch(createChat({ userId: item.id, token: token }))
@@ -40,7 +40,19 @@ export const HomePage = () => {
     }
     const [content, setContent] = useState("")
     const [isProfile, setIsProfile] = useState(false)
-    const handleCreateNewMessage = () => {}
+    const handleCreateNewMessage = () => {
+        if (currentChat && authState.reqUser && token) {
+            dispatch(
+                createMessage({
+                    content: content,
+                    chatId: currentChat.id,
+                    userId: authState.reqUser.id,
+                    token: token,
+                })
+            )
+        }
+        console.log("Message created")
+    }
     const handleNavigate = () => {
         setIsProfile(true)
     }
@@ -58,6 +70,7 @@ export const HomePage = () => {
     const token = localStorage.getItem("token")
     const authState = useAppSelector((store: RootState) => store.auth)
     const chatState = useAppSelector((store: RootState) => store.chat)
+    const messageState = useAppSelector((store: RootState) => store.message)
     const navigate = useNavigate()
     useEffect(() => {
         if (!authState.reqUser) {
@@ -75,19 +88,19 @@ export const HomePage = () => {
         }
     }
     useEffect(() => {
-        if (token && authState.reqUser?.id) {
+        if (token) {
             dispatch(getChatsForUser({ token: token }))
         }
-    }, [
-        chatState.createdChat,
-        chatState.createdGroup,
-        dispatch,
-        authState.reqUser?.id,
-        token,
-    ])
+    }, [chatState.createdChat, chatState.createdGroup, dispatch, token])
     const handleCurrentChat = (item: ChatServer) => {
         setCurrentChat(item)
     }
+    useEffect(() => {
+        if (currentChat?.id && token) {
+            dispatch(getAllMessages({ token: token, chatId: currentChat.id }))
+            console.log("reached refresh")
+        }
+    }, [currentChat, dispatch, token, messageState.newMessage])
 
     return (
         <div className="relative">
@@ -233,9 +246,11 @@ export const HomePage = () => {
                                                 : authState.reqUser?.id ==
                                                     currentChat.users[0].id
                                                   ? currentChat.users[1]
-                                                        .profilePicture
+                                                        .profilePicture ||
+                                                    "https://cdn.pixabay.com/photo/2016/04/01/10/11/avatar-1299805_960_720.png"
                                                   : currentChat.users[0]
-                                                        .profilePicture
+                                                        .profilePicture ||
+                                                    "https://cdn.pixabay.com/photo/2016/04/01/10/11/avatar-1299805_960_720.png"
                                         }
                                     />
                                     <p>
@@ -255,10 +270,16 @@ export const HomePage = () => {
                         </div>
                         <div className="px-10 h-[85vh] overflow-y-scroll ">
                             <div className="space-y-1 flex flex-col justify-center mt-20 py-2">
-                                {[1, 1, 1, 1, 1].map((item, i) => (
+                                {messageState.messages.map((item, i) => (
                                     <MessageCard
-                                        content={"message"}
-                                        isReqUserMessage={i % 2 == 0}
+                                        key={i}
+                                        content={item.content}
+                                        isReqUserMessage={
+                                            !(
+                                                item.user.id ===
+                                                authState.reqUser?.id
+                                            )
+                                        }
                                     />
                                 ))}
                             </div>
@@ -270,12 +291,12 @@ export const HomePage = () => {
                                 <ImAttachment className="mx-2 cursor-pointer" />
                             </div>
                             <input
-                                className="py-2 outline-none border-none pl-4 rounded-full w-[85%]"
+                                className="py-2 text-black outline-none border-none pl-4 rounded-full w-[85%]"
                                 type="text"
                                 onChange={(e) => setContent(e.target.value)}
                                 placeholder="Type message here"
                                 value={content}
-                                onKeyPress={(e) => {
+                                onKeyDown={(e) => {
                                     if (e.key == "Enter") {
                                         handleCreateNewMessage()
                                     }

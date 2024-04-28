@@ -10,11 +10,11 @@ export interface Message {
 }
 export interface SendMessageRequest {
     content: string
-    chatId: string
-    userId: string
-    token: number
+    chatId: number
+    userId: number
+    token: string
 }
 export interface GetMessagesRequest {
-    token: number
+    token: string
     chatId: number
 }
