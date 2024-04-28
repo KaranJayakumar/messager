@@ -25,14 +25,18 @@ import { RootState } from "@/redux/store"
 import { searchUser } from "@/redux/Auth/Action"
 import { createChat, getChatsForUser } from "@/redux/Chat/Action"
 import { User } from "@/types"
+import { ChatServer } from "@/redux/Chat/types"
+import { current } from "@reduxjs/toolkit"
 
 export const HomePage = () => {
     const [searchQuery, setSearchQuery] = useState("")
     const [isGroup, setIsGroup] = useState(false)
-    const [currentChat, setCurrentChat] = useState()
+    const [currentChat, setCurrentChat] = useState<ChatServer | null>(null)
     const handleClickOnChatCard = (item: User) => {
-        dispatch(createChat({ userId: item.id, token: token }))
-        //setCurrentChat(item)
+        if (token) {
+            dispatch(createChat({ userId: item.id, token: token }))
+            setSearchQuery("")
+        }
     }
     const [content, setContent] = useState("")
     const [isProfile, setIsProfile] = useState(false)
@@ -71,8 +75,19 @@ export const HomePage = () => {
         }
     }
     useEffect(() => {
-        dispatch(getChatsForUser({}))
-    }, [chatState.createdChat, chatState.createdGroup, dispatch])
+        if (token && authState.reqUser?.id) {
+            dispatch(getChatsForUser({ token: token }))
+        }
+    }, [
+        chatState.createdChat,
+        chatState.createdGroup,
+        dispatch,
+        authState.reqUser?.id,
+        token,
+    ])
+    const handleCurrentChat = (item: ChatServer) => {
+        setCurrentChat(item)
+    }
 
     return (
         <div className="relative">
@@ -155,7 +170,12 @@ export const HomePage = () => {
                                             key={index}
                                         >
                                             <hr />
-                                            <ChatCard user={item} />
+                                            <ChatCard
+                                                profilePicture={
+                                                    item.profilePicture
+                                                }
+                                                name={item.fullName}
+                                            />
                                         </div>
                                     ))}
                                 {chatState.chats.length > 0 &&
@@ -163,12 +183,25 @@ export const HomePage = () => {
                                     chatState.chats?.map((item, index) => (
                                         <div
                                             onClick={() =>
-                                                handleClickOnChatCard(item)
+                                                handleCurrentChat(item)
                                             }
                                             key={index}
                                         >
                                             <hr />
-                                            <ChatCard user={item} />
+                                            <ChatCard
+                                                profilePicture={item.chatImage}
+                                                name={
+                                                    item?.isGroup
+                                                        ? item.chatName
+                                                        : authState.reqUser
+                                                                ?.id ===
+                                                            item.users[0].id
+                                                          ? item.users[1]
+                                                                .fullName
+                                                          : item.users[0]
+                                                                .fullName
+                                                }
+                                            />
                                         </div>
                                     ))}
                             </div>
@@ -194,9 +227,25 @@ export const HomePage = () => {
                                 <div className="py-3 space-x-4 flex items-center px-3">
                                     <img
                                         className="w-10 h-10 rounded-full"
-                                        src="https://cdn.pixabay.com/photo/2017/02/01/22/02/mountain-landscape-2031539_1280.jpg"
+                                        src={
+                                            currentChat.isGroup
+                                                ? currentChat.chatImage
+                                                : authState.reqUser?.id ==
+                                                    currentChat.users[0].id
+                                                  ? currentChat.users[1]
+                                                        .profilePicture
+                                                  : currentChat.users[0]
+                                                        .profilePicture
+                                        }
                                     />
-                                    <p>Username</p>
+                                    <p>
+                                        {currentChat.isGroup
+                                            ? currentChat.chatName
+                                            : authState.reqUser?.id ==
+                                                currentChat.users[0].id
+                                              ? currentChat.users[1].fullName
+                                              : currentChat.users[0].fullName}
+                                    </p>
                                 </div>
                                 <div className="py-3 space-x-4 flex items-center px-3">
                                     <AiOutlineSearch />

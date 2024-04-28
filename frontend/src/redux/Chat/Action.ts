@@ -5,27 +5,35 @@ import {
     createSingleChatAction,
     getUserChatsAction,
 } from "./Reducer"
-interface SingleChatData {
+interface ChatData {
+    userId: number | null
     token: string
 }
-export const createChat = (chatData) => async (dispatch: AppDispatch) => {
-    try {
-        const res = await fetch(`${BASE_API_URL}/api/chats/createChat`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${chatData.token}`,
-            },
-            body: JSON.stringify(chatData),
-        })
-        const responseJson = await res.json()
-        dispatch(createSingleChatAction(responseJson))
-    } catch (e) {
-        console.log("Error creating chat", e)
-    }
+interface GroupChatData {
+    userIds: number[]
+    chatName: string
+    chatImage: string
+    token: string
 }
+export const createChat =
+    (chatData: ChatData) => async (dispatch: AppDispatch) => {
+        try {
+            const res = await fetch(`${BASE_API_URL}/api/chats/createChat`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${chatData.token}`,
+                },
+                body: JSON.stringify(chatData),
+            })
+            const responseJson = await res.json()
+            dispatch(createSingleChatAction(responseJson))
+        } catch (e) {
+            console.log("Error creating chat", e)
+        }
+    }
 export const createGroupChat =
-    (groupChatData) => async (dispatch: AppDispatch) => {
+    (groupChatData: GroupChatData) => async (dispatch: AppDispatch) => {
         try {
             const res = await fetch(`${BASE_API_URL}/api/chats/group`, {
                 method: "POST",
@@ -42,7 +50,8 @@ export const createGroupChat =
         }
     }
 export const getChatsForUser =
-    (userChatData) => async (dispatch: AppDispatch) => {
+    (userChatData: Omit<ChatData, "userId">) =>
+    async (dispatch: AppDispatch) => {
         try {
             const res = await fetch(`${BASE_API_URL}/api/chats/user`, {
                 method: "GET",
@@ -50,9 +59,9 @@ export const getChatsForUser =
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${userChatData.token}`,
                 },
-                body: JSON.stringify(userChatData),
             })
             const responseJson = await res.json()
+            console.log(responseJson)
             dispatch(getUserChatsAction(responseJson))
         } catch (e) {
             console.log("Error creating chat", e)

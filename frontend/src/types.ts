@@ -2,6 +2,7 @@ export interface User {
     id: number
     fullName: string
     email: string
-    profile_picture: string
+    profilePicture: string
     password: string
+    image: string
 }

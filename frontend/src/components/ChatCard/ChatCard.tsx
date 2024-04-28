@@ -1,19 +1,24 @@
-import { User } from "@/types"
-export const ChatCard = ({ user }: { user: User }) => {
+export const ChatCard = ({
+    profilePicture,
+    name,
+}: {
+    profilePicture: string | null
+    name: string
+}) => {
     return (
         <div className="flex items-center justify-center py-2 group cursor-pointer">
             <div className="w-20%">
                 <img
                     className="h-14 w-14 rounded-full"
                     src={
-                        user.profile_picture ||
+                        profilePicture ||
                         "https://cdn.pixabay.com/photo/2016/04/01/10/11/avatar-1299805_960_720.png"
                     }
                 />
             </div>
             <div className="pl-5 w-[80%]">
                 <div className="flex justify-between items-center">
-                    <p className="text-lg">{user.fullName}</p>
+                    <p className="text-lg">{name}</p>
                     <p className="text-sm">Timestamp</p>
                 </div>
                 <div className="flex justify-between items-center">
