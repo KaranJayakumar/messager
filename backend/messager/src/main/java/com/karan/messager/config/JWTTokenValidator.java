@@ -22,7 +22,7 @@ public class JWTTokenValidator extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws BadCredentialsException, ServletException, IOException {
-        System.out.println("Reached filter");
+        //System.out.println("Reached filter");
        String jwt = request.getHeader("Authorization");
        if(jwt != null){
            try{
