@@ -9,18 +9,22 @@ import { RootState } from "@/redux/store"
 import { searchUser } from "@/redux/Auth/Action"
 import { User } from "@/types"
 
-export const CreateGroup = () => {
+export const CreateGroup = ({
+    setIsGroup,
+}: {
+    setIsGroup: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
     const [newGroup, setNewGroup] = useState(false)
-    const [groupMember, setGroupMember] = useState<Set<User>>(new Set())
+    const [groupMembers, setGroupMembers] = useState<Set<User>>(new Set())
     const [searchQuery, setSearchQuery] = useState("")
     const authState = useAppSelector((store: RootState) => store.auth)
     const token = localStorage.getItem("token")
     const dispatch = useAppDispatch()
 
     const handleRemoveMember = (item) => {
-        const updatedGroupMember = new Set(groupMember)
+        const updatedGroupMember = new Set(groupMembers)
         updatedGroupMember.delete(item)
-        setGroupMember(updatedGroupMember)
+        setGroupMembers(updatedGroupMember)
     }
 
     const handleSearch = (query: string) => {
@@ -42,7 +46,7 @@ export const CreateGroup = () => {
                     </div>
                     <div className="relative py-4 px-3">
                         <div className="flex space-x-2 flex-wrap space-y-1">
-                            {Array.from(groupMember).map((item: User) => (
+                            {Array.from(groupMembers).map((item: User) => (
                                 <SelectedMember
                                     key={item.id}
                                     handleRemoveMember={handleRemoveMember}
@@ -67,10 +71,10 @@ export const CreateGroup = () => {
                                 <div
                                     onClick={() => {
                                         const updatedGroupMember = new Set(
-                                            groupMember
+                                            groupMembers
                                         )
                                         updatedGroupMember.add(item)
-                                        setGroupMember(updatedGroupMember)
+                                        setGroupMembers(updatedGroupMember)
                                         setSearchQuery("")
                                     }}
                                     key={item.id}
@@ -95,7 +99,9 @@ export const CreateGroup = () => {
                     </div>
                 </div>
             )}
-            {newGroup && <NewGroup />}
+            {newGroup && (
+                <NewGroup groupMembers={groupMembers} setIsGroup={setIsGroup} />
+            )}
         </div>
     )
 }

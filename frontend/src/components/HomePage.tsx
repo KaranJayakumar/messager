@@ -107,7 +107,7 @@ export const HomePage = () => {
             <div className="py-14 bg-[#00a884] w-full "></div>
             <div className="flex h-[90vh] bg-[#33302f] absolute top-[3vh] left-[2vw] w-[96vw]">
                 <div className="left w-[30%] h-full">
-                    {isGroup && <CreateGroup />}
+                    {isGroup && <CreateGroup setIsGroup={setIsGroup} />}
                     {isProfile && (
                         <div className="w-full h-full">
                             <Profile
@@ -212,7 +212,7 @@ export const HomePage = () => {
                                             <ChatCard
                                                 profilePicture={item.chatImage}
                                                 name={
-                                                    item?.isGroup
+                                                    item?.group
                                                         ? item.chatName
                                                         : authState.reqUser
                                                                 ?.id ===

@@ -1,9 +1,9 @@
-import { User } from "../Auth/types"
+import { User } from "@/types"
 export interface ChatServer {
     id: number
     chatName: string
     chatImage: string | null
-    isGroup: boolean
+    group: boolean
     createdBy: User
     admins: User[]
     users: User[]
