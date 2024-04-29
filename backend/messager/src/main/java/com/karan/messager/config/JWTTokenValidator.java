@@ -26,7 +26,6 @@ public class JWTTokenValidator extends OncePerRequestFilter {
        String jwt = request.getHeader("Authorization");
        if(jwt != null){
            try{
-               System.out.println("Reached filter");
                //Bearer token
                jwt = jwt.substring(7);
                SecretKey key = Keys.hmacShaKeyFor(JWTConstant.SECRET_KEY.getBytes());

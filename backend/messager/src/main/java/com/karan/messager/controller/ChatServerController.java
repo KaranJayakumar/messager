@@ -10,10 +10,12 @@ import com.karan.messager.response.ApiResponse;
 import com.karan.messager.service.ChatServerService;
 import com.karan.messager.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/chats")
@@ -25,9 +27,12 @@ public class ChatServerController {
         this.userService = userService;
         this.chatServerService = chatServerService;
     }
-    @PostMapping("/createChat")
+    @PostMapping(value = "/createChat", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ChatServer> createChatServerHandler(@RequestBody SingleChatRequest singleChatRequest, @RequestHeader("Authorization") String jwt) throws UserException {
         User reqUser = userService.findUserProfile(jwt);
+        if(Objects.equals(singleChatRequest.getUserId(), reqUser.getId())){
+            throw new UserException("Cannot create chat with yourself");
+        }
         ChatServer chatServer = chatServerService.createChatServer(reqUser, singleChatRequest.getUserId());
         return new ResponseEntity<>(chatServer, HttpStatus.OK);
     }
@@ -43,8 +48,9 @@ public class ChatServerController {
         ChatServer chatServer = chatServerService.findChatById(chatId);
         return new ResponseEntity<>(chatServer, HttpStatus.OK);
     }
+
     @GetMapping("/user")
-    public ResponseEntity<List<ChatServer>> findAllChatServersByUserIdHandler(@PathVariable Integer chatId, @RequestHeader("Authorization") String jwt) throws UserException, ChatServerException {
+    public ResponseEntity<List<ChatServer>> findAllChatServersByUserIdHandler(@RequestHeader("Authorization") String jwt) throws UserException, ChatServerException {
         User reqUser = userService.findUserProfile(jwt);
         List<ChatServer> chatServers = chatServerService.findAllChatsByUserId(reqUser.getId());
         return new ResponseEntity<>(chatServers, HttpStatus.OK);

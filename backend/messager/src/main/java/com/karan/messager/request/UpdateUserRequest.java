@@ -6,6 +6,14 @@ public class UpdateUserRequest {
     public UpdateUserRequest(){
     }
 
+    public void setProfile_picture(String profile_picture) {
+        this.profile_picture = profile_picture;
+    }
+
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
+    }
+
     public UpdateUserRequest(String full_name, String profile_picture) {
         this.full_name = full_name;
         this.profile_picture = profile_picture;

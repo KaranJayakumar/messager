@@ -31,6 +31,7 @@ public class ChatServerServiceImplementation implements ChatServerService {
         newChatServer.getUsers().add(user);
         newChatServer.getUsers().add(reqUser);
         newChatServer.setGroup(false);
+        chatServerRepository.save(newChatServer);
         return newChatServer;
     }
 
@@ -45,9 +46,7 @@ public class ChatServerServiceImplementation implements ChatServerService {
 
     @Override
     public List<ChatServer> findAllChatsByUserId(Integer userId) throws UserException {
-        User user = userService.findUserById(userId);
-        return chatServerRepository.findChatServersHavingUserId(user.getId());
-
+        return chatServerRepository.findChatServersHavingUserId(userId);
     }
 
     @Override
@@ -55,14 +54,16 @@ public class ChatServerServiceImplementation implements ChatServerService {
         ChatServer group = new ChatServer();
         group.setGroup(true);
         group.setChatImage(req.getChat_image());
-        group.setChatName(req.getChat_name());
+        group.setChatName(req.getChatName());
         group.setCreatedBy(reqUser);
+        group.getUsers().add(reqUser);
         for(Integer userId : req.getUserIds()){
             User user = userService.findUserById(userId);
             if(user!= null){
                 group.getUsers().add(user);
             }
         }
+        chatServerRepository.save(group);
         return group;
     }
 

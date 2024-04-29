@@ -8,9 +8,13 @@ public class SendMessageRequest {
     private Integer userId;
 
     public SendMessageRequest(String content, Integer chatId, Integer userId) {
+        super();
         this.content = content;
         this.chatId = chatId;
         this.userId = userId;
+    }
+    public SendMessageRequest(){
+        super();
     }
 
     public void setUserId(Integer userId) {

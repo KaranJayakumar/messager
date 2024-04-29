@@ -47,6 +47,7 @@ public class GlobalException {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetail> otherExceptionHandler(Exception e, WebRequest req){
         ErrorDetail err = new ErrorDetail(e.getMessage(), req.getDescription(false), LocalDateTime.now());
+        System.out.println(e.getMessage());
         return new ResponseEntity<ErrorDetail>(err, HttpStatus.BAD_REQUEST);
     }
 }

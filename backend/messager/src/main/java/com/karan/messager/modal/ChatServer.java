@@ -1,5 +1,6 @@
 package com.karan.messager.modal;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -37,7 +38,44 @@ public class ChatServer {
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<User> users = new HashSet<>();
 
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getChatName() {
+        return chatName;
+    }
+
+    public String getChatImage() {
+        return chatImage;
+    }
+
+    public boolean isGroup() {
+        return isGroup;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setAdmins(Set<User> admins) {
+        this.admins = admins;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
     @OneToMany(mappedBy="chatServer")
+    @JsonManagedReference
     private List<Message> messages = new ArrayList<>();
     public ChatServer() {
     }

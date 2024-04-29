@@ -33,8 +33,9 @@ public class UserController {
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/update")
+    @PutMapping(value = "/update", consumes = "application/json", produces =  MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse> updateUserHandler(@RequestBody UpdateUserRequest req, @RequestHeader("Authorization") String token) throws UserException {
+        System.out.println("reached");
         User user = userService.findUserProfile(token);
         userService.updateUser(user.getId(), req);
         ApiResponse res = new ApiResponse("User updated Successfully", true);

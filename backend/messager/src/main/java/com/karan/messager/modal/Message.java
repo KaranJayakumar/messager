@@ -1,5 +1,6 @@
 package com.karan.messager.modal;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,18 @@ public class Message {
     @Id
     @GeneratedValue
     private Integer id;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Message() {
+        super();
+    }
 
     @Column(name = "content")
     private String content;
@@ -22,6 +35,7 @@ public class Message {
     private User user;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name="chat_server_id", nullable=false)
     private ChatServer chatServer;
 

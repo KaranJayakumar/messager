@@ -32,7 +32,7 @@ public class MessageController {
         Message message = messageService.sendMessage(req);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
-    @GetMapping("/create/{chatId}")
+    @GetMapping("/chat/{chatId}")
     public ResponseEntity<List<Message>> getChatServerMessagesHandler(@PathVariable Integer chatId, @RequestHeader("Authorization") String jwt) throws ChatServerException, UserException {
         User user = userService.findUserProfile(jwt);
         List<Message> messages = messageService.getChatMessages(chatId, user);
