@@ -52,7 +52,7 @@ export const StatusViewer = () => {
                                     value={
                                         index === currentStoryIndex
                                             ? currStoryProgress
-                                            : 0
+                                            : item.image.length
                                     }
                                 />
                             ))}
@@ -60,7 +60,7 @@ export const StatusViewer = () => {
                         <div>
                             <BsArrowLeft
                                 onClick={handleNavigate}
-                                className="text-white text-4xl cursor-pointer absolute top-[1.7rem] left-5"
+                                className="text-white text-4xl cursor-pointer absolute top-[1.rem] left-5"
                             />
                             <AiOutlineClose
                                 onClick={handleNavigate}

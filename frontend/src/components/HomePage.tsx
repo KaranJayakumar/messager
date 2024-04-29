@@ -246,23 +246,21 @@ export const HomePage = () => {
                         <div className="header absolute top-0 w-full">
                             <div className="flex justify-between">
                                 <div className="py-3 space-x-4 flex items-center px-3">
-                                    <img
-                                        className="w-10 h-10 rounded-full"
-                                        src={
-                                            currentChat.isGroup
-                                                ? currentChat.chatImage
-                                                : authState.reqUser?.id ==
-                                                    currentChat.users[0].id
-                                                  ? currentChat.users[1]
-                                                        .profilePicture ||
-                                                    "https://cdn.pixabay.com/photo/2016/04/01/10/11/avatar-1299805_960_720.png"
-                                                  : currentChat.users[0]
-                                                        .profilePicture ||
-                                                    "https://cdn.pixabay.com/photo/2016/04/01/10/11/avatar-1299805_960_720.png"
-                                        }
-                                    />
+                                    src=
+                                    {currentChat?.group
+                                        ? currentChat.chatImage
+                                        : currentChat &&
+                                          authState.reqUser &&
+                                          (authState.reqUser.id ===
+                                          (currentChat.users[0]?.id || null)
+                                              ? currentChat.users[1]
+                                                    ?.profilePicture ||
+                                                "https://cdn.pixabay.com/photo/2016/04/01/10/11/avatar-1299805_960_720.png"
+                                              : currentChat.users[0]
+                                                    ?.profilePicture ||
+                                                "https://cdn.pixabay.com/photo/2016/04/01/10/11/avatar-1299805_960_720.png")}
                                     <p>
-                                        {currentChat.isGroup
+                                        {currentChat.group
                                             ? currentChat.chatName
                                             : authState.reqUser?.id ==
                                                 currentChat.users[0].id

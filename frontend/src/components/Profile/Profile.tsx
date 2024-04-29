@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent } from "react"
+import { useState } from "react"
 import { BsArrowLeft, BsCheck2, BsPencil } from "react-icons/bs"
 import { Input } from "../ui/input"
 import { currentUser, updateUser } from "@/redux/Auth/Action"

@@ -21,7 +21,7 @@ export const CreateGroup = ({
     const token = localStorage.getItem("token")
     const dispatch = useAppDispatch()
 
-    const handleRemoveMember = (item) => {
+    const handleRemoveMember = (item: User) => {
         const updatedGroupMember = new Set(groupMembers)
         updatedGroupMember.delete(item)
         setGroupMembers(updatedGroupMember)

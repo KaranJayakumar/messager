@@ -16,7 +16,7 @@ export const Status = () => {
                     </div>
                     <hr />
                     <div className="overflow-y-scroll h-[86%] pt-2">
-                        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item) => (
+                        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(() => (
                             <StatusUserCard />
                         ))}
                     </div>

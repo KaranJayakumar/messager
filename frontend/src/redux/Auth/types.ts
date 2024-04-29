@@ -1,3 +1,4 @@
+import { User } from "@/types"
 export interface LoginResponse {
     jwt: string
     isAuth: boolean
