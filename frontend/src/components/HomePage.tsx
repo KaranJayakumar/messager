@@ -124,9 +124,12 @@ export const HomePage = () => {
                                 >
                                     <img
                                         className="rounded-full w-10 h-10 cursor-pointer"
-                                        src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg"
+                                        src={
+                                            authState.reqUser?.profilePicture ||
+                                            "https://cdn.pixabay.com/photo/2017/03/28/22/55/night-photograph-2183637_1280.jpg"
+                                        }
                                     />
-                                    <p>Username</p>
+                                    <p>{authState.reqUser?.fullName}</p>
                                 </div>
                                 <div className="space-x-3 text-2xl flex">
                                     <TbCircleDashed />
@@ -137,7 +140,12 @@ export const HomePage = () => {
                                         </PopoverTrigger>
                                         <PopoverContent className="w-15">
                                             <div className="flex flex-col gap-4">
-                                                <Label className="cursor-pointer">
+                                                <Label
+                                                    onClick={() =>
+                                                        setIsProfile(true)
+                                                    }
+                                                    className="cursor-pointer"
+                                                >
                                                     Profile
                                                 </Label>
                                                 <Label

@@ -113,16 +113,14 @@ export const searchUser =
 export const updateUser =
     (data: UpdateUser) => async (dispatch: AppDispatch) => {
         try {
-            const response = await fetch(
-                `${BASE_API_URL}/api/users/update/${data.id}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `BEARER ${data.token}`,
-                    },
-                }
-            )
+            const response = await fetch(`${BASE_API_URL}/api/users/update`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `BEARER ${data.token}`,
+                },
+                body: JSON.stringify(data),
+            })
             const res = await response.json()
             console.log("login" + res)
             dispatch(updateUserAction(res))

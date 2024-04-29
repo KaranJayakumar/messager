@@ -4,15 +4,32 @@ import { SelectedMember } from "./SelectedMember"
 import { Input } from "../ui/input"
 import { ChatCard } from "../ChatCard/ChatCard"
 import { NewGroup } from "./NewGroup"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { RootState } from "@/redux/store"
+import { searchUser } from "@/redux/Auth/Action"
+import { User } from "@/types"
+
 export const CreateGroup = () => {
     const [newGroup, setNewGroup] = useState(false)
-    const [groupMember, setGroupMember] = useState(new Set())
+    const [groupMember, setGroupMember] = useState<Set<User>>(new Set())
     const [searchQuery, setSearchQuery] = useState("")
-    const handleRemoveMember = (item: number | unknown) => {
-        groupMember.delete(item)
-        setGroupMember(groupMember)
+    const authState = useAppSelector((store: RootState) => store.auth)
+    const token = localStorage.getItem("token")
+    const dispatch = useAppDispatch()
+
+    const handleRemoveMember = (item) => {
+        const updatedGroupMember = new Set(groupMember)
+        updatedGroupMember.delete(item)
+        setGroupMember(updatedGroupMember)
     }
-    const handleSearch = (searchQuery: string) => {}
+
+    const handleSearch = (query: string) => {
+        setSearchQuery(query)
+        if (token) {
+            dispatch(searchUser({ query: query, token: token }))
+        }
+    }
+
     return (
         <div className="w-full h-full">
             {!newGroup && (
@@ -25,23 +42,18 @@ export const CreateGroup = () => {
                     </div>
                     <div className="relative py-4 px-3">
                         <div className="flex space-x-2 flex-wrap space-y-1">
-                            {groupMember.size > 0 &&
-                                Array.from(groupMember).map(
-                                    (item: number | unknown) => (
-                                        <SelectedMember
-                                            handleRemoveMember={(item) =>
-                                                handleRemoveMember(item)
-                                            }
-                                            member={item}
-                                        />
-                                    )
-                                )}
+                            {Array.from(groupMember).map((item: User) => (
+                                <SelectedMember
+                                    key={item.id}
+                                    handleRemoveMember={handleRemoveMember}
+                                    member={item}
+                                />
+                            ))}
                         </div>
                         <Input
                             type="text"
                             onChange={(e) => {
                                 handleSearch(e.target.value)
-                                setSearchQuery(e.target.value)
                             }}
                             className="outline border-b p-2 w-[93%]"
                             placeholder="Search for your friends!"
@@ -49,16 +61,25 @@ export const CreateGroup = () => {
                     </div>
                     <div className="overflow-y-scroll h-[50.2vh]">
                         {searchQuery &&
-                            [1, 1, 1, 1].map((item) => (
+                            authState.searchUser &&
+                            Array.isArray(authState.searchUser) &&
+                            authState.searchUser.map((item: User) => (
                                 <div
                                     onClick={() => {
-                                        groupMember.add(item)
-                                        setGroupMember(groupMember)
+                                        const updatedGroupMember = new Set(
+                                            groupMember
+                                        )
+                                        updatedGroupMember.add(item)
+                                        setGroupMember(updatedGroupMember)
                                         setSearchQuery("")
                                     }}
+                                    key={item.id}
                                 >
                                     <hr />
-                                    <ChatCard />
+                                    <ChatCard
+                                        profilePicture={item.profilePicture}
+                                        name={item.fullName}
+                                    />
                                 </div>
                             ))}
                     </div>
